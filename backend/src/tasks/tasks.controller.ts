@@ -9,4 +9,9 @@ export class TasksController {
   getTasks() {
     return this.tasksService.getTasks();
   }
+
+  @Post()
+  createTask() {
+    return this.tasksService.createTask('hello');
+  }
 }
