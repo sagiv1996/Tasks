@@ -7,11 +7,13 @@ const tasks: Array<task> = [
     id: '1',
     title: 'Learn english',
     createdAt: new Date(new Date().setFullYear(new Date().getFullYear() - 30)),
+    isCompleted: false,
   },
   {
     id: '2',
     title: 'Eat food',
     createdAt: new Date(new Date().setMonth(new Date().getMonth() - 5)),
+    isCompleted: false,
   },
 ];
 @Injectable()
@@ -28,7 +30,12 @@ export class TasksService {
 
   createTask(task: CreateTask) {
     const id = this.createId();
-    const newTask: task = { id, title: task.title, createdAt: new Date() };
+    const newTask: task = {
+      id,
+      title: task.title,
+      createdAt: new Date(),
+      isCompleted: false,
+    };
     tasks.push(newTask);
     return newTask;
   }
@@ -37,6 +44,7 @@ export class TasksService {
     const taskIndex = tasks.findIndex((task) => task.id === task.id);
     if (taskIndex >= 0) {
       tasks[taskIndex].title = task.title;
+      tasks[taskIndex].isCompleted = task.isCompleted;
       return tasks[taskIndex];
     }
   }

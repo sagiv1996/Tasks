@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean } from 'class-validator';
 
 export class UpdateTask {
   @IsString()
@@ -8,4 +8,7 @@ export class UpdateTask {
   @IsString()
   @IsNotEmpty()
   title: string;
+
+  @IsBoolean()
+  isCompleted: boolean = false;
 }
