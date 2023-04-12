@@ -16,6 +16,7 @@ function TaskCard({ task }: { task: Task }) {
     <Card style={{ minHeight: Math.floor(150 + Math.random() * 150) }}>
       <CardHeader
         title={task.title}
+        style={{ textDecoration: task.isCompleted ? "line-through" : "none" }}
         subheader={<TimeAgo datetime={task.createdAt} />}
       />
       <CardActions sx={{ justifyContent: "center" }}>
@@ -24,7 +25,7 @@ function TaskCard({ task }: { task: Task }) {
           endIcon={<SendIcon />}
           onClick={() => updateTask(task)}
         >
-          Done
+          {task.isCompleted ? "Undone" : "Done"}
         </Button>
       </CardActions>
     </Card>
