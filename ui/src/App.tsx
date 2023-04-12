@@ -2,9 +2,19 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import TaskCard from "./components/taskCard";
 import axios from "axios";
-import { Box, Skeleton, Grid, Stack } from "@mui/material";
+import {
+  Box,
+  Skeleton,
+  Grid,
+  Stack,
+  Accordion,
+  AccordionSummary,
+  Typography,
+  AccordionDetails,
+} from "@mui/material";
 import StackGrid from "react-stack-grid";
 import { Task } from "./interfaces/tasks.interface";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const timeoutForUserExperience = 1500;
 function App() {
@@ -39,11 +49,33 @@ function App() {
           ))}
         </StackGrid>
       ) : (
-        <StackGrid columnWidth={420} horizontal={true}>
-          {tasks.map((task, index) => (
-            <TaskCard task={task} key={index} />
-          ))}
-        </StackGrid>
+        <div>
+          <Accordion defaultExpanded={true}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>Tasks that are not yet finished</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <StackGrid columnWidth={420} horizontal={true}>
+                {tasks.map((task, index) => (
+                  <TaskCard task={task} key={index} />
+                ))}
+              </StackGrid>
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>Completed tasks</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <StackGrid columnWidth={420} horizontal={true}>
+                {tasks.map((task, index) => (
+                  <TaskCard task={task} key={index} />
+                ))}
+              </StackGrid>
+            </AccordionDetails>
+          </Accordion>
+        </div>
       )}
     </div>
   );
