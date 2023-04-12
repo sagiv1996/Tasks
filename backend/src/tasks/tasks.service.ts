@@ -43,10 +43,13 @@ export class TasksService {
 
   updateTask(updateTask: UpdateTask) {
     const taskIndex = tasks.findIndex((task) => updateTask.id === task.id);
+    console.log(updateTask.isCompleted);
     if (taskIndex >= 0) {
       tasks[taskIndex].title = updateTask.title || tasks[taskIndex].title;
       tasks[taskIndex].isCompleted =
-        updateTask.isCompleted || tasks[taskIndex].isCompleted;
+        updateTask.isCompleted !== undefined
+          ? updateTask.isCompleted
+          : tasks[taskIndex].isCompleted;
       return tasks[taskIndex];
     }
   }

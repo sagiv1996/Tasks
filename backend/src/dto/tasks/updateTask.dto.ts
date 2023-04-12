@@ -6,8 +6,7 @@ export class UpdateTask {
   id: string;
 
   @IsString()
-  @IsNotEmpty()
-  title: string;
+  title: string = '';
 
   @IsBoolean()
   isCompleted: boolean = false;

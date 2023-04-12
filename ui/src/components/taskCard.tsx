@@ -3,9 +3,13 @@ import * as React from "react";
 import SendIcon from "@mui/icons-material/Send";
 import TimeAgo from "timeago-react";
 import { Task } from "../interfaces/tasks.interface";
+import axios from "axios";
 
 const updateTask = async (task: Task): Promise<boolean> => {
-  console.log({ task });
+  await axios.patch("http://localhost:3001/tasks", {
+    id: task.id,
+    isCompleted: !task.isCompleted,
+  });
   return false;
 };
 function TaskCard({ task }: { task: Task }) {
