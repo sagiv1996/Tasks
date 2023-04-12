@@ -6,6 +6,7 @@ import { Box, Skeleton, Grid, Stack } from "@mui/material";
 import StackGrid from "react-stack-grid";
 import { Task } from "./interfaces/tasks.interface";
 
+const timeoutForUserExperience = 1500;
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,9 @@ function App() {
         setTasks(response.data);
       })
       // for user experience
-      .finally(() => setTimeout(() => setLoading(false), 4000));
+      .finally(() =>
+        setTimeout(() => setLoading(false), timeoutForUserExperience)
+      );
   };
 
   useEffect(() => {
