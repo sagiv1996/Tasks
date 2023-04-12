@@ -3,10 +3,7 @@ import "./App.css";
 import TaskCard from "./components/taskCard";
 import axios from "axios";
 import {
-  Box,
   Skeleton,
-  Grid,
-  Stack,
   Accordion,
   AccordionSummary,
   Typography,
@@ -17,7 +14,6 @@ import { Task } from "./interfaces/tasks.interface";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CountUp from "react-countup";
 
-const timeoutForUserExperience = 1500;
 function App() {
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
   const [notCompletedTasks, setNotCompletedTasks] = useState<Task[]>([]);
@@ -35,8 +31,9 @@ function App() {
       params: { isCompleted: true },
     });
     setCompletedTasks(loadCompletedTasks.data);
-
-    // for user experience
+    
+    // For user experience
+    const timeoutForUserExperience = 1500;
     setTimeout(() => setLoading(false), timeoutForUserExperience);
   };
 
