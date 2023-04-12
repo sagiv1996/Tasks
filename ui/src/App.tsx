@@ -15,6 +15,7 @@ import {
 import StackGrid from "react-stack-grid";
 import { Task } from "./interfaces/tasks.interface";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CountUp from "react-countup";
 
 const timeoutForUserExperience = 1500;
 function App() {
@@ -56,9 +57,11 @@ function App() {
         </StackGrid>
       ) : (
         <div>
-          <Accordion defaultExpanded={true}>
+          <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>Tasks that are not yet finished</Typography>
+              <Typography>
+                Completed tasks (<CountUp end={completedTasks.length} />)
+              </Typography>
             </AccordionSummary>
             <AccordionDetails>
               <StackGrid columnWidth={420} horizontal={true}>
@@ -68,10 +71,12 @@ function App() {
               </StackGrid>
             </AccordionDetails>
           </Accordion>
-
-          <Accordion>
+          <Accordion defaultExpanded={true}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>Completed tasks</Typography>
+              <Typography>
+                Tasks that are not yet finished (
+                <CountUp end={notCompletedTasks.length} />)
+              </Typography>
             </AccordionSummary>
             <AccordionDetails>
               <StackGrid columnWidth={420} horizontal={true}>
