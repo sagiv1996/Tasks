@@ -20,6 +20,7 @@ const tasks: Array<task> = [
 export class TasksService {
   private createId() {
     const id = (Math.random() * 100).toFixed(0);
+
     if (tasks.findIndex((task) => task.id === id) >= 0) return this.createId();
     return id;
   }
@@ -40,11 +41,12 @@ export class TasksService {
     return newTask;
   }
 
-  updateTask(task: UpdateTask) {
-    const taskIndex = tasks.findIndex((task) => task.id === task.id);
+  updateTask(updateTask: UpdateTask) {
+    const taskIndex = tasks.findIndex((task) => updateTask.id === task.id);
     if (taskIndex >= 0) {
-      tasks[taskIndex].title = task.title;
-      tasks[taskIndex].isCompleted = task.isCompleted;
+      tasks[taskIndex].title = updateTask.title || tasks[taskIndex].title;
+      tasks[taskIndex].isCompleted =
+        updateTask.isCompleted || tasks[taskIndex].isCompleted;
       return tasks[taskIndex];
     }
   }
