@@ -16,16 +16,15 @@ export class TasksService {
     const newTask: task = {
       id,
       title: task.title,
-      createdAt: new Date(),
       isCompleted: false,
+      createdAt: task.createdAt,
     };
     tasks.push(newTask);
     return newTask;
   }
 
-  updateTask(updateTask: UpdateTask) {
-    const taskIndex = tasks.findIndex((task) => updateTask.id === task.id);
-    console.log(updateTask.isCompleted);
+  updateTask(id: string, updateTask: UpdateTask) {
+    const taskIndex = tasks.findIndex((task) => id === task.id);
     if (taskIndex >= 0) {
       tasks[taskIndex].title = updateTask.title || tasks[taskIndex].title;
       tasks[taskIndex].isCompleted =
