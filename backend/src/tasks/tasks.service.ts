@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CreateTask } from 'src/dto/tasks/createTask.dto';
 
 const tasks: Array<task> = [
   { id: '1', title: 'Learn english' },
@@ -15,10 +16,10 @@ export class TasksService {
     return tasks;
   }
 
-  createTask(title: string) {
+  createTask(task: CreateTask) {
     const id = this.createId();
-    const task: task = { id, title };
-    tasks.push(task);
-    return task;
+    const newTask: task = { id, title: task.title };
+    tasks.push(newTask);
+    return newTask;
   }
 }
