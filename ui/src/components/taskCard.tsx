@@ -6,8 +6,7 @@ import { Task } from "../interfaces/tasks.interface";
 import axios from "axios";
 
 const updateTask = async (task: Task): Promise<boolean> => {
-  await axios.patch("http://localhost:3001/tasks", {
-    id: task.id,
+  await axios.patch(`http://localhost:3001/tasks/${task.id}`, {
     isCompleted: !task.isCompleted,
   });
   return false;
