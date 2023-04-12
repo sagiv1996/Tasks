@@ -3,8 +3,16 @@ import { CreateTask } from 'src/dto/tasks/createTask.dto';
 import { UpdateTask } from 'src/dto/tasks/updateTask.dto';
 
 const tasks: Array<task> = [
-  { id: '1', title: 'Learn english' },
-  { id: '2', title: 'Eat food' },
+  {
+    id: '1',
+    title: 'Learn english',
+    createdAt: new Date(new Date().setFullYear(new Date().getFullYear() - 30)),
+  },
+  {
+    id: '2',
+    title: 'Eat food',
+    createdAt: new Date(new Date().setMonth(new Date().getMonth() - 5)),
+  },
 ];
 @Injectable()
 export class TasksService {
@@ -20,7 +28,7 @@ export class TasksService {
 
   createTask(task: CreateTask) {
     const id = this.createId();
-    const newTask: task = { id, title: task.title };
+    const newTask: task = { id, title: task.title, createdAt: new Date() };
     tasks.push(newTask);
     return newTask;
   }
