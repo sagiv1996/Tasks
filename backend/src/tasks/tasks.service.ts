@@ -7,8 +7,10 @@ const tasks: Array<task> = [];
 
 @Injectable()
 export class TasksService {
-  getTasks() {
-    return tasks;
+  getTasks(filter: { isCompleted: string; }) {
+    if (!filter.isCompleted) return tasks;
+    const isCompleted = filter.isCompleted.toLowerCase() === 'true';
+    return tasks.filter((task) => task.isCompleted === isCompleted);
   }
 
   createTask(task: CreateTask) {
