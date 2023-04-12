@@ -6,8 +6,8 @@ const data = [];
 const numOfRecord = 20;
 for (let i = 1; i <= numOfRecord; i++) {
   data.push({
-    title: faker.lorem.sentences(),
-    createdAt: faker.date.past(),
+    title: faker.lorem.sentence(),
+    createdAt: faker.date.past().toISOString(),
     isCompleted: false,
   });
 }
