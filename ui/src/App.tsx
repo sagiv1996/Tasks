@@ -1,14 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Task from './components/task';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import TaskCard from "./components/taskCard";
+import axios from "axios";
+import { Box, Skeleton, Grid, Stack } from "@mui/material";
+import StackGrid from "react-stack-grid";
+import { Task } from "./interfaces/tasks.interface";
 
-
-const tasks = [{id: "1", title: "this is first"}, {id: 2, title: "this is second"}]
 function App() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const getTasks = async () => {
+    axios
+      .get<Task[]>("http://localhost:3001/tasks")
+      .then((response) => {
+        setTasks(response.data);
+      })
+      // for user experience
+      .finally(() => setTimeout(() => setLoading(false), 4000));
+  };
+
+  useEffect(() => {
+    getTasks();
+  }, []);
+
   return (
     <div className="App">
-      {tasks.map(task=><Task task={task} />)}
+      {loading ? (
+        <StackGrid columnWidth={420} horizontal={true}>
+          {Array.from(new Array(25)).map((item, index) => (
+            <Skeleton
+              variant="rectangular"
+              height={Math.floor(150 + Math.random() * 150)}
+            />
+          ))}
+        </StackGrid>
+      ) : (
+        <StackGrid columnWidth={420} horizontal={true}>
+          {tasks.map((task, index) => (
+            <TaskCard task={task} key={index} />
+          ))}
+        </StackGrid>
+      )}
     </div>
   );
 }
