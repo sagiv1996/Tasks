@@ -18,19 +18,25 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const timeoutForUserExperience = 1500;
 function App() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
+  const [notCompletedTasks, setNotCompletedTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
 
   const getTasks = async () => {
-    axios
-      .get<Task[]>("http://localhost:3001/tasks")
-      .then((response) => {
-        setTasks(response.data);
-      })
-      // for user experience
-      .finally(() =>
-        setTimeout(() => setLoading(false), timeoutForUserExperience)
-      );
+    const taskEndpoint = "http://localhost:3001/tasks";
+
+    const loadNotCompletedTasks = await axios.get<Task[]>(taskEndpoint, {
+      params: { isCompleted: false },
+    });
+    setNotCompletedTasks(loadNotCompletedTasks.data);
+
+    const loadCompletedTasks = await axios.get<Task[]>(taskEndpoint, {
+      params: { isCompleted: true },
+    });
+    setCompletedTasks(loadCompletedTasks.data);
+
+    // for user experience
+    setTimeout(() => setLoading(false), timeoutForUserExperience);
   };
 
   useEffect(() => {
@@ -56,7 +62,7 @@ function App() {
             </AccordionSummary>
             <AccordionDetails>
               <StackGrid columnWidth={420} horizontal={true}>
-                {tasks.map((task, index) => (
+                {completedTasks.map((task, index) => (
                   <TaskCard task={task} key={index} />
                 ))}
               </StackGrid>
@@ -69,7 +75,7 @@ function App() {
             </AccordionSummary>
             <AccordionDetails>
               <StackGrid columnWidth={420} horizontal={true}>
-                {tasks.map((task, index) => (
+                {notCompletedTasks.map((task, index) => (
                   <TaskCard task={task} key={index} />
                 ))}
               </StackGrid>
