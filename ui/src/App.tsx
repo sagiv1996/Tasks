@@ -13,6 +13,7 @@ import StackGrid from "react-stack-grid";
 import { Task } from "./interfaces/tasks.interface";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CountUp from "react-countup";
+import FieldTask from "./components/FieldTask";
 
 function App() {
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
@@ -54,6 +55,7 @@ function App() {
         </StackGrid>
       ) : (
         <div>
+          <FieldTask />
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography>
