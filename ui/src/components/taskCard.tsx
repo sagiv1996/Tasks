@@ -5,12 +5,12 @@ import TimeAgo from "timeago-react";
 import { Task } from "../interfaces/tasks.interface";
 import axios from "axios";
 
-const TaskCard = ({ task, onChange }: { task: Task; onChange?: any }) => {
+const TaskCard = ({ task, onChange }: { task: Task; onChange: Function }) => {
   const updateTask = async (task: Task): Promise<void> => {
     await axios.patch(`http://localhost:3001/tasks/${task.id}`, {
       isCompleted: !task.isCompleted,
     });
-    onChange(task);
+    onChange();
   };
 
   return (
