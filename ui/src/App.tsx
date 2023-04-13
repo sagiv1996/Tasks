@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import TaskCard from "./components/taskCard";
-import axios from "axios";
 import {
   Skeleton,
   Accordion,
@@ -15,6 +14,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CountUp from "react-countup";
 import FieldTask from "./components/FieldTask";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import instance from "./instance";
 
 function App() {
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
@@ -22,15 +22,13 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   const getTasks = async () => {
-    const taskEndpoint = "http://localhost:3001/tasks";
-
     try {
-      const loadNotCompletedTasks = await axios.get<Task[]>(taskEndpoint, {
+      const loadNotCompletedTasks = await instance.get<Task[]>("/", {
         params: { isCompleted: false },
       });
       setNotCompletedTasks(loadNotCompletedTasks.data);
 
-      const loadCompletedTasks = await axios.get<Task[]>(taskEndpoint, {
+      const loadCompletedTasks = await instance.get<Task[]>("/", {
         params: { isCompleted: true },
       });
       setCompletedTasks(loadCompletedTasks.data);

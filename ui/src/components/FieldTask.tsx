@@ -1,14 +1,14 @@
 import { Paper, InputBase, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
-import axios from "axios";
 import { enqueueSnackbar } from "notistack";
+import instance from "../instance";
 
 const FieldTask = ({ onChange }: { onChange: Function }) => {
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { status } = await axios.post("http://localhost:3001/tasks", {
+      const { status } = await instance.post("/", {
         title: task,
       });
       if (status === 201) onChange();
