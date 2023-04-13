@@ -2,6 +2,7 @@ import { Paper, InputBase, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
 
 const FieldTask = ({ onChange }: { onChange: Function }) => {
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -11,8 +12,13 @@ const FieldTask = ({ onChange }: { onChange: Function }) => {
         title: task,
       });
       if (status === 201) onChange();
-    } catch (e) {
-      alert(e);
+    } catch (e: any) {
+      enqueueSnackbar(
+        `Server say: ${e.message}` || "Unknown error. please try again.",
+        {
+          variant: "error",
+        }
+      );
     } finally {
       setTask("");
     }

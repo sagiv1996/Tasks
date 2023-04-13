@@ -14,6 +14,7 @@ import { Task } from "./interfaces/tasks.interface";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CountUp from "react-countup";
 import FieldTask from "./components/FieldTask";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function App() {
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
@@ -23,19 +24,31 @@ function App() {
   const getTasks = async () => {
     const taskEndpoint = "http://localhost:3001/tasks";
 
-    const loadNotCompletedTasks = await axios.get<Task[]>(taskEndpoint, {
-      params: { isCompleted: false },
-    });
-    setNotCompletedTasks(loadNotCompletedTasks.data);
+    try {
+      const loadNotCompletedTasks = await axios.get<Task[]>(taskEndpoint, {
+        params: { isCompleted: false },
+      });
+      setNotCompletedTasks(loadNotCompletedTasks.data);
 
-    const loadCompletedTasks = await axios.get<Task[]>(taskEndpoint, {
-      params: { isCompleted: true },
-    });
-    setCompletedTasks(loadCompletedTasks.data);
+      const loadCompletedTasks = await axios.get<Task[]>(taskEndpoint, {
+        params: { isCompleted: true },
+      });
+      setCompletedTasks(loadCompletedTasks.data);
 
-    // For user experience
-    const timeoutForUserExperience = 1500;
-    setTimeout(() => setLoading(false), timeoutForUserExperience);
+      // For user experience
+      const timeoutForUserExperience = 1500;
+      setTimeout(() => setLoading(false), timeoutForUserExperience);
+      enqueueSnackbar("Traffic to the server was successful!", {
+        variant: "success",
+      });
+    } catch {
+      enqueueSnackbar(
+        "The traffic against the server failed. please try again.",
+        {
+          variant: "error",
+        }
+      );
+    }
   };
 
   useEffect(() => {
@@ -55,6 +68,7 @@ function App() {
         </StackGrid>
       ) : (
         <div>
+          <SnackbarProvider maxSnack={8} />
           <FieldTask onChange={getTasks} />
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
