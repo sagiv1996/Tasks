@@ -55,7 +55,7 @@ function App() {
         </StackGrid>
       ) : (
         <div>
-          <FieldTask />
+          <FieldTask onChange={getTasks} />
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography>
