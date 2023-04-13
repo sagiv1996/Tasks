@@ -31,7 +31,7 @@ function App() {
       params: { isCompleted: true },
     });
     setCompletedTasks(loadCompletedTasks.data);
-    
+
     // For user experience
     const timeoutForUserExperience = 1500;
     setTimeout(() => setLoading(false), timeoutForUserExperience);
@@ -63,7 +63,7 @@ function App() {
             <AccordionDetails>
               <StackGrid columnWidth={420} horizontal={true}>
                 {completedTasks.map((task, index) => (
-                  <TaskCard task={task} key={index} />
+                  <TaskCard task={task} key={index} onChange={getTasks} />
                 ))}
               </StackGrid>
             </AccordionDetails>
@@ -78,7 +78,7 @@ function App() {
             <AccordionDetails>
               <StackGrid columnWidth={420} horizontal={true}>
                 {notCompletedTasks.map((task, index) => (
-                  <TaskCard task={task} key={index} />
+                  <TaskCard task={task} key={index} onChange={getTasks} />
                 ))}
               </StackGrid>
             </AccordionDetails>

@@ -5,13 +5,14 @@ import TimeAgo from "timeago-react";
 import { Task } from "../interfaces/tasks.interface";
 import axios from "axios";
 
-const updateTask = async (task: Task): Promise<boolean> => {
-  await axios.patch(`http://localhost:3001/tasks/${task.id}`, {
-    isCompleted: !task.isCompleted,
-  });
-  return false;
-};
-function TaskCard({ task }: { task: Task }) {
+function TaskCard({ task, onChange }: { task: Task; onChange?: any }) {
+  const updateTask = async (task: Task): Promise<void> => {
+    await axios.patch(`http://localhost:3001/tasks/${task.id}`, {
+      isCompleted: !task.isCompleted,
+    });
+    onChange(task);
+  };
+
   return (
     <Card style={{ minHeight: Math.floor(150 + Math.random() * 150) }}>
       <CardHeader
