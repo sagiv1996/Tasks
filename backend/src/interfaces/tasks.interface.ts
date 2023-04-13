@@ -1,6 +1,6 @@
 interface task {
   id: string;
   title: string;
-  createdAt: Date;
+  createdAt: string;
   isCompleted: boolean;
 }

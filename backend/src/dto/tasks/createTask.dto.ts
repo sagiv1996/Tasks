@@ -6,5 +6,5 @@ export class CreateTask {
   title: string;
 
   @IsDateString()
-  createdAt: Date = new Date();
+  createdAt: string = new Date().toISOString();
 }
