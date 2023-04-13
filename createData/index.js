@@ -3,7 +3,7 @@ const { faker } = require("@faker-js/faker");
 
 const data = [];
 
-const numOfRecord = 20;
+const numOfRecord = 50;
 for (let i = 1; i <= numOfRecord; i++) {
   data.push({
     title: faker.lorem.sentence(),
@@ -12,7 +12,7 @@ for (let i = 1; i <= numOfRecord; i++) {
   });
 }
 
-async function sendData() {
+const sendData = async () => {
   for (const obj of data) {
     try {
       await axios.post("http://localhost:3001/tasks", obj);
@@ -21,6 +21,6 @@ async function sendData() {
       console.error(`Error sending data: ${error.message}`);
     }
   }
-}
+};
 
 sendData();
