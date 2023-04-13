@@ -2,13 +2,20 @@ import { Paper, InputBase, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import axios from "axios";
-import { type } from "@testing-library/user-event/dist/type";
 
 const FieldTask = ({ onChange }: { onChange: Function }) => {
   const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await axios.post("http://localhost:3001/tasks", { title: task });
-    onChange();
+    try {
+      const { status } = await axios.post("http://localhost:3001/tasks", {
+        title: task,
+      });
+      if (status === 201) onChange();
+    } catch (e) {
+      alert(e);
+    } finally {
+      setTask("");
+    }
   };
 
   const [task, setTask] = useState<string>();
