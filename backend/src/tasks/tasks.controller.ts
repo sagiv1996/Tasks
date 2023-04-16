@@ -10,13 +10,14 @@ import {
 import { TasksService } from './tasks.service';
 import { CreateTask } from 'src/dto/tasks/createTask.dto';
 import { UpdateTask } from 'src/dto/tasks/updateTask.dto';
+import { GetTasks } from 'src/dto/tasks/getTask.dto';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  getTasks(@Query() query) {
+  getTasks(@Query() query: GetTasks) {
     return this.tasksService.getTasks(query);
   }
 

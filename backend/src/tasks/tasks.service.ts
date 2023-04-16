@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTask } from 'src/dto/tasks/createTask.dto';
+import { GetTasks } from 'src/dto/tasks/getTask.dto';
 import { UpdateTask } from 'src/dto/tasks/updateTask.dto';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,10 +8,12 @@ const tasks: Array<task> = [];
 
 @Injectable()
 export class TasksService {
-  getTasks(filter: { isCompleted: string; }) {
-    if (!filter.isCompleted) return tasks;
-    const isCompleted = filter.isCompleted.toLowerCase() === 'true';
-    return tasks.filter((task) => task.isCompleted === isCompleted);
+  getTasks(query: GetTasks) {
+    if (query.isCompleted === undefined)
+      return tasks.slice(query.skip, query.skip + query.limit);
+    return tasks
+      .filter((task) => task.isCompleted === query.isCompleted)
+      .slice(query.skip, query.skip + query.limit);
   }
 
   createTask(task: CreateTask) {
