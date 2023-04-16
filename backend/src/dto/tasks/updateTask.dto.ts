@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsString, IsNotEmpty, IsBoolean, isBoolean } from 'class-validator';
+import { IsString, IsBoolean, isBoolean } from 'class-validator';
 
 export class UpdateTask {
   @IsString()
