@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/model/task.dart';
+import 'package:timeago/timeago.dart' as TimeAgo;
 
-class TaskCard extends StatelessWidget {
+class TaskCard extends StatefulWidget {
   Task task;
   double height;
   TaskCard({
@@ -11,10 +14,15 @@ class TaskCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<TaskCard> createState() => _TaskCardState();
+}
+
+class _TaskCardState extends State<TaskCard> {
+  @override
   Widget build(BuildContext context) {
     return Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: ConstrainedBox(
 
-      constraints: BoxConstraints(minHeight: height, ),
+      constraints: BoxConstraints(minHeight: widget.height, ),
 
       child: Stack(
 
@@ -23,16 +31,20 @@ class TaskCard extends StatelessWidget {
 
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Text(task.title, textAlign: TextAlign.center,), Text(task.createdAt, textAlign: TextAlign.center)],
+            children: [Text(widget.task.title, textAlign: TextAlign.center, style: TextStyle(decoration: widget.task.isCompleted? TextDecoration.lineThrough : TextDecoration.none),)
+              ,Text(TimeAgo.format(DateTime.parse(widget.task.createdAt))),
+              TextButton(onPressed: (()=>changeStatus()), child: Text(widget.task.isCompleted? 'Uncompleted' : "Completed"))
+            ]
           ),
         ],
       ),
     ));
-      // Column(
-      // mainAxisSize: MainAxisSize.max,
-      //
-      // mainAxisAlignment: MainAxisAlignment.center,
-      // children: [
-      //   Text(task.title), Text(task.createdAt)]);
+  }
+
+  changeStatus() async {
+    Task newTask =  await widget.task.updateCompleted();
+    setState(() {
+      widget.task = newTask;
+    });
   }
 }

@@ -1,11 +1,17 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:convert/convert.dart';
 
 class Task {
   String id;
   String title;
   bool isCompleted;
   String createdAt;
+  static const String backendApi = 'http://192.168.1.169:3001/tasks/';
 
   Task(
       {required this.id,
@@ -18,14 +24,14 @@ class Task {
     String? createdAt,
     bool isCompleted = false,
   }) async {
-    await Future.delayed(const Duration(seconds: 5));
-    String id = Random().nextInt(10000).toString();
-
+    final response =
+        await http.post(Uri.parse(backendApi), body: {"title": title});
+    final responseBodyToJson = json.decode(response.body);
     return Task(
-        id: id,
-        createdAt: createdAt ?? DateTime.now().toIso8601String(),
-        isCompleted: isCompleted,
-        title: title);
+        id: responseBodyToJson["id"],
+        createdAt: responseBodyToJson["createdAt"],
+        isCompleted: responseBodyToJson["isCompleted"],
+        title: responseBodyToJson["title"]);
   }
 
   Future<Task> updateTitle({required String title}) async {
@@ -35,31 +41,34 @@ class Task {
   }
 
   Future<Task> updateCompleted() async {
-    await Future.delayed(const Duration(seconds: 5));
-    isCompleted = !isCompleted;
+    final response = await http.patch(Uri.parse('$backendApi$id'),
+        body: {"isCompleted": (!isCompleted).toString()});
+    if (response.statusCode == 200) {
+      isCompleted = !isCompleted;
+    }
     return this;
   }
 
-  static Future<List<Task>> getTasks() async {
-    List<Task> tasks = [
-      Task(id: "7a8e57ce-937c-4df8-a8f7-2dda94d5a852", createdAt: "2022-04-16T13:10:43.446Z", isCompleted: false, title: "Nobis nobis officiis consequatur modi."),
-    Task(id: "8ca373f4-3793-4a59-a1cd-d91cb91cde1e",
-        title: "Ad perspiciatis exercitationem et porro ullam.",
-        isCompleted: false,
-        createdAt: "2022-10-11T00:44:39.736Z"),
-      Task( id: "c3ea2e10-4bfc-4cf5-957a-3bc699c5ea8d",
-          title: "Quidem nemo tempore cum veritatis voluptas voluptate culpa.",
-          isCompleted: true,
-          createdAt: "2022-12-21T21:18:16.932Z"),
-      Task( id: "ab743cfc-6e86-463e-9307-629d53562f23",
-          title: "Sit accusantium veritatis fugiat in aliquid explicabo.",
-          isCompleted: false,
-          createdAt: "2022-11-23T19:25:06.792Z"),
-      Task( id: "ab743cfc-6e86-463e-9307-629d53562f23",
-          title: "Sit accusantium veritatis fugiat in aliquid explicabo.",
-          isCompleted: false,
-          createdAt: "2022-11-23T19:25:06.792Z")
-    ];
+  factory Task.fromJson(Map<String, dynamic> json) {
+    return Task(
+        id: json['id'],
+        title: json['title'],
+        createdAt: json['createdAt'],
+        isCompleted: json['isCompleted']);
+  }
+
+  static Future<List<Task>> getTasks({int limit = 25, int skip = 0}) async {
+    String getTasksUri = "$backendApi?limit=$limit&skip=$skip";
+    final response = await http.get(Uri.parse(getTasksUri));
+    final responseBodyToJson = json.decode(response.body);
+    List<Task> tasks = <Task>[];
+    for (var task in responseBodyToJson) {
+      tasks.add(Task(
+          id: task['id'],
+          createdAt: task['createdAt'],
+          isCompleted: task['isCompleted'],
+          title: task['title']));
+    }
     return tasks;
   }
 }
